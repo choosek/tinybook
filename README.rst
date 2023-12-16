@@ -4,11 +4,23 @@ tinybook
 
 Minimal pure-Python library that demonstrates a basic workflow for an encrypted order book by leveraging a secure multi-party computation (MPC) `protocol <https://eprint.iacr.org/2023/1740>`__.
 
-|pypi|
+|pypi| |readthedocs| |actions| |coveralls|
 
 .. |pypi| image:: https://badge.fury.io/py/tinybook.svg
    :target: https://badge.fury.io/py/tinybook
    :alt: PyPI version and link.
+
+.. |readthedocs| image:: https://readthedocs.org/projects/tinybook/badge/?version=latest
+   :target: https://tinybook.readthedocs.io/en/latest/?badge=latest
+   :alt: Read the Docs documentation status.
+
+.. |actions| image:: https://github.com/choosek/tinybook/workflows/lint-test-cover-docs/badge.svg
+   :target: https://github.com/choosek/tinybook/actions/workflows/lint-test-cover-docs.yml
+   :alt: GitHub Actions status.
+
+.. |coveralls| image:: https://coveralls.io/repos/github/choosek/tinybook/badge.svg?branch=main
+   :target: https://coveralls.io/github/choosek/tinybook?branch=main
+   :alt: Coveralls test coverage summary.
 
 Installation and Usage
 ----------------------
@@ -82,7 +94,7 @@ This library can be published as a `package on PyPI <https://pypi.org/project/ti
 
     python -m pip install .[publish]
 
-Ensure that the correct version number appears in ``pyproject.toml``, and that any links in this README document to the Read the Docs documentation of this package (or its dependencies) have appropriate version numbers. Create and push a tag for this version (replacing ``?.?.?`` with the version number):
+Ensure that the correct version number appears in ``pyproject.toml``, and that any links in this README document to the Read the Docs documentation of this package (or its dependencies) have appropriate version numbers. Also ensure that the Read the Docs project for this library has an `automation rule <https://docs.readthedocs.io/en/stable/automation-rules.html>`__ that activates and sets as the default all tagged versions. Create and push a tag for this version (replacing ``?.?.?`` with the version number):
 
 .. code-block:: bash
 
