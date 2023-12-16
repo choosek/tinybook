@@ -1,0 +1,54 @@
+[project]
+name = "tinybook"
+version = "0.1.0"
+description = """\
+    Minimal pure-Python library that demonstrates a basic workflow for an \
+    encrypted order book by leveraging a secure multi-party computation \
+    (MPC) protocol.\
+    """
+license = {text = "MIT"}
+authors = [
+    {name = "Choose K"},
+    {email = "team@choosek.com"}
+]
+readme = "README.rst"
+requires-python = ">=3.7"
+dependencies = [
+    "modulo~=2.1",
+    "tinynmc~=0.2"
+]
+
+[project.urls]
+Repository = "https://github.com/choosek/tinybook"
+Documentation = "https://tinybook.readthedocs.io"
+
+[project.optional-dependencies]
+docs = [
+    "toml~=0.10.2",
+    "sphinx~=4.2.0",
+    "sphinx-rtd-theme~=1.0.0",
+    "sphinx-autodoc-typehints~=1.12.0"
+]
+test = [
+    "pytest~=7.2",
+    "pytest-cov~=4.0"
+]
+lint = [
+    "pylint~=2.17.0"
+]
+coveralls = [
+    "coveralls~=3.3.1"
+]
+publish = [
+    "build~=0.10",
+    "twine~=4.0"
+]
+
+[build-system]
+requires = [
+    "setuptools>=68.0"
+]
+build-backend = "setuptools.build_meta"
+
+[tool.pytest.ini_options]
+addopts = "--doctest-modules --ignore=docs --cov=tinybook --cov-report term-missing"
