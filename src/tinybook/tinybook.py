@@ -4,8 +4,9 @@ encrypted order book by leveraging a secure multi-party computation (MPC)
 `protocol <https://eprint.iacr.org/2023/1740>`__.
 """
 from __future__ import annotations
-from typing import List
+from typing import Optional, Dict, List, Tuple, Sequence, Iterable
 import doctest
+from modulo import modulo
 import tinynmc
 
 class node:
@@ -27,8 +28,8 @@ class node:
     >>> preprocess(nodes, prices=16)
 
     A requests must be submitted for the opportunity to submit an order. The
-    clients can create :obj:`request` instances for this purpose. Below, the
-    two clients each create their request.
+    clients can create :obj:`request` instances for this purpose. Below, two
+    clients each create their request.
 
     >>> request_ask = request.ask()
     >>> request_bid = request.bid()
@@ -74,7 +75,7 @@ class node:
     >>> reveal(shares) is None
     True
     """
-    def __init__(self):
+    def __init__(self: node):
         """
         Create a node instance and initialize its private attributes.
         """
@@ -83,9 +84,9 @@ class node:
         self._nodes: List[tinynmc.node] = None
 
     def masks( # pylint: disable=redefined-outer-name
-            self,
-            request
-        ):
+            self: node,
+            request: Iterable[Tuple[int, int]]
+        ) -> List[Dict[Tuple[int, int], modulo]]:
         """
         Return masks for a given request.
 
@@ -96,27 +97,27 @@ class node:
             for i in range(self._prices)
         ]
 
-    def outcome(self, ask, bid):
+    def outcome(self: node, ask: Sequence[order], bid: Sequence[order]) -> List[modulo]:
         """
         Perform computation to determine a share of the overall workflow
         outcome that represents the bid-ask spread.
 
         :param votes: Sequence of masked orders.
         """
-        orders = [ask, bid]
-        prices = len(ask)
+        orders: List[Sequence[order]] = [ask, bid]
+        prices: int = len(ask)
         return [ # pylint: disable=unsubscriptable-object
             self._nodes[i].compute(self._signature, [order[i] for order in orders])
             for i in range(prices)
         ]
 
-class request(list):
+class request(List[Tuple[int, int]]):
     """
     Data structure for representing a request to submit an order. A request can
     be submitted to each node to obtain corresponding masks for an order.
     """
     @staticmethod
-    def ask():
+    def ask() -> request:
         """
         Create a request to submit an ask order.
 
@@ -126,7 +127,7 @@ class request(list):
         return request([(0, 0), (1, 0)])
 
     @staticmethod
-    def bid():
+    def bid() -> request:
         """
         Create a request to submit a bid order.
 
@@ -156,13 +157,18 @@ class order(list):
     >>> isinstance(order(masks, price), order)
     True
     """
-    def __init__(self, masks, price):
+    def __init__(
+            self: order,
+            masks: List[List[Dict[Tuple[int, int], modulo]]],
+            price: int
+        ):
         """
         Create a masked order that can be broadcast to nodes.
         """
-        prices = len(masks[0])
+        prices: int = len(masks[0])
         for i in range(prices):
             masks_i = [mask[i] for mask in masks]
+
             coordinate_to_value = {}
             kind = list(masks_i[0].keys())[0][1]
             for key in masks_i[0]:
@@ -172,7 +178,7 @@ class order(list):
 
             self.append(tinynmc.masked_factors(coordinate_to_value, masks_i))
 
-def preprocess(nodes, prices):
+def preprocess(nodes: Sequence[node], prices: int):
     """
     Simulate a preprocessing workflow among the supplied nodes for a workflow
     that supports the specified number of distinct prices (where prices are
@@ -188,7 +194,7 @@ def preprocess(nodes, prices):
     >>> preprocess(nodes, prices=16)
     """
     # pylint: disable=protected-access
-    signature = [2, 1, 1]
+    signature: List[int] = [2, 1, 1]
 
     for node_ in nodes:
         node_._signature = signature
@@ -198,7 +204,7 @@ def preprocess(nodes, prices):
     for i in range(prices):
         tinynmc.preprocess(signature, [node_._nodes[i] for node_ in nodes])
 
-def reveal(shares):
+def reveal(shares: List[List[modulo]]) -> Optional[range]:
     """
     Reconstruct the overall workflow outcome (representing the bid-ask spread)
     from the shares obtained from each node.
@@ -238,8 +244,8 @@ def reveal(shares):
     >>> reveal(shares)
     range(1, 3)
     """
-    prices = len(shares[0])
-    result = [
+    prices: int = len(shares[0])
+    result: List[int] = [
         int(sum(share[i] for share in shares) + 2) - 1
         for i in range(prices)
     ]
@@ -248,7 +254,7 @@ def reveal(shares):
         return None
 
     result.append(0)
-    ask = result.index(1)
+    ask: int = result.index(1)
     return range(ask, ask + result[ask + 1:].index(0) + 1)
 
 if __name__ == '__main__':
