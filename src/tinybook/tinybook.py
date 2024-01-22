@@ -113,9 +113,18 @@ class node:
 
 class request(List[Tuple[int, int]]):
     """
-    Data structure for representing a request to submit an order. A request can
-    be submitted to each node to obtain corresponding masks for an order.
+    Data structure for representing a request to submit an order. A request
+    can be submitted to each node to obtain corresponding masks for an order.
+
+    Instances should only be constructed using the :obj:`request.ask` and
+    :obj:`request.bid` methods.
     """
+    def __init__(self: request):
+        """
+        An instance should only be constructed using the :obj:`request.ask`
+        or :obj:`request.bid` methods.
+        """
+
     @staticmethod
     def ask() -> request:
         """
@@ -124,7 +133,9 @@ class request(List[Tuple[int, int]]):
         >>> request.ask()
         [(0, 0), (1, 0)]
         """
-        return request([(0, 0), (1, 0)])
+        request_ = request()
+        request_.extend([(0, 0), (1, 0)])
+        return request_
 
     @staticmethod
     def bid() -> request:
@@ -134,7 +145,9 @@ class request(List[Tuple[int, int]]):
         >>> request.bid()
         [(0, 1), (2, 0)]
         """
-        return request([(0, 1), (2, 0)])
+        request_ = request()
+        request_.extend([(0, 1), (2, 0)])
+        return request_
 
 class order(list):
     """
