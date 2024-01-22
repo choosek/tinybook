@@ -22,9 +22,12 @@ Minimal pure-Python library that demonstrates a basic workflow for an encrypted 
    :target: https://coveralls.io/github/choosek/tinybook?branch=main
    :alt: Coveralls test coverage summary.
 
+Purpose
+-------
+This library demonstrates how a functionality can be implemented using a `secure multi-party computation (MPC) protocol <https://eprint.iacr.org/2023/1740>`__ for evaluating arithmetic sum-of-products expressions (as implemented in `tinynmc <https://pypi.org/project/tinynmc>`__). The approach used in this library can serve as a template for any workflow that relies on multiple simultaneous instances of such a protocol.
+
 Installation and Usage
 ----------------------
-
 This library is available as a `package on PyPI <https://pypi.org/project/tinybook>`__:
 
 .. code-block:: bash
@@ -37,6 +40,69 @@ The library can be imported in the usual way:
 
     import tinybook
     from tinybook import *
+
+Basic Example
+^^^^^^^^^^^^^
+
+.. |node| replace:: ``node``
+.. _node: https://tinybook.readthedocs.io/en/0.1.0/_source/tinybook.html#tinybook.tinybook.node
+
+Suppose that a secure decentralized voting workflow is supported by three parties. The |node|_ objects would be instantiated locally by each of
+these three parties:
+
+.. code-block:: python
+
+    >>> nodes = [node(), node(), node()]
+
+The preprocessing workflow that the nodes must execute can be simulated. It is assumed that all permitted prices are integers greater than or equal to ``0`` and strictly less than a fixed maximum value. The number of distinct prices can be supplied to the preprocessing simulation:
+
+.. code-block:: python
+
+    >>> preprocess(nodes, prices=16)
+
+A request must be submitted for the opportunity to submit an order. Below, two clients each create their request (one for an ask order and the other for a bid order):
+
+.. code-block:: python
+
+    >>> request_ask = request.ask()
+    >>> request_bid = request.bid()
+
+Each client can deliver their request to each node, and each node can then locally generate masks that can be returned to the requesting client:
+
+.. code-block:: python
+
+    >>> masks_ask = [node.masks(request_ask) for node in nodes]
+    >>> masks_bid = [node.masks(request_bid) for node in nodes]
+
+.. |order| replace:: ``order``
+.. _order: https://tinybook.readthedocs.io/en/0.1.0/_source/tinybook.html#tinybook.tinybook.order
+
+Each client can then generate locally an |order|_ instance (*i.e.*, a masked representation of the order):
+
+.. code-block:: python
+
+    >>> order_ask = order(masks_ask, 4)
+    >>> order_bid = order(masks_bid, 9)
+
+Each client can broadcast its masked order to all the nodes. Each node can locally assemble these as they arrive. Once a node has received both masked orders, it can determine its shares of the overall outcome:
+
+.. code-block:: python
+
+    >>> shares = [node.outcome(order_ask, order_bid) for node in nodes]
+
+.. |range| replace:: ``range``
+.. _range: https://docs.python.org/3/library/functions.html#func-range
+
+The overall outcome can be reconstructed from the shares by the workflow operator. The outcome is either ``None`` (if the bid price does not equal or exceed the ask price) or a |range|_ instance representing the bid-ask spread (where for a |range|_ instance ``r``, the ask price is ``min(r)`` and the bid price is ``max(r)``):
+
+.. code-block:: python
+
+    >>> reveal(shares)
+    range(4, 10)
+    >>> min(reveal(shares))
+    4
+    >>> max(reveal(shares))
+    9
 
 Development
 -----------

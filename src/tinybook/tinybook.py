@@ -15,7 +15,7 @@ class node:
     and performing node operations.
 
     Suppose that a workflow is supported by three parties. The :obj:`node`
-    objects would be instantiated locally by each of the three parties.
+    objects would be instantiated locally by each of these three parties.
 
     >>> nodes = [node(), node(), node()]
 
@@ -27,7 +27,7 @@ class node:
 
     >>> preprocess(nodes, prices=16)
 
-    A requests must be submitted for the opportunity to submit an order. The
+    A request must be submitted for the opportunity to submit an order. The
     clients can create :obj:`request` instances for this purpose. Below, two
     clients each create their request.
 
