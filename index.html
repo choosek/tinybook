@@ -1,0 +1,700 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>tinybook: Encrypted Order Book Workflow Demo</title>
+    <script>
+      var favIcon = "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABhGlDQ1BJQ0MgcHJvZmlsZQAAKJF9kT1Iw0AcxV9TpVIqDhYUEczQOtlFRRylikWwUNoKrTqYXPoFTRqSFBdHwbXg4Mdi1cHFWVcHV0EQ/ABxdXFSdJES/5cUWsR4cNyPd/ced+8AoVllqtkzB6iaZaQTcTGXXxUDrwhiCAKiGJOYqSczi1l4jq97+Ph6F+NZ3uf+HP1KwWSATySeY7phEW8Qz2xaOud94jArSwrxOfGEQRckfuS67PIb55LDAs8MG9n0PHGYWCx1sdzFrGyoxNPEEUXVKF/Iuaxw3uKsVuusfU/+wlBBW8lwneYoElhCEimIkFFHBVVYiNGqkWIiTftxD/+I40+RSyZXBYwcC6hBheT4wf/gd7dmcWrSTQrFgd4X2/6IAoFdoNWw7e9j226dAP5n4Err+GtNYPaT9EZHixwBA9vAxXVHk/eAyx1g+EmXDMmR/DSFYhF4P6NvygODt0Bwze2tvY/TByBLXS3fAAeHwHiJstc93t3X3du/Z9r9/QC8rHLEluMd/wAAAAZiS0dEAAAAAAAA+UO7fwAAAAlwSFlzAAALEwAACxMBAJqcGAAAA55JREFUWMPtlztLK2sUhp+JO+QmpBAvKSSgARELC7WIUcEmBEwhprHQxkr8CQqCjVhpZ+kPEKy8QWqjhREDghEkQQxekqiZZBKZye07zdk5aty6j1F3s18YmAwf33pmrfdbkyUBgj+oHy8fuN1uRkdHyWazqKrK/Px8TQFWV1dRVRVFUfD7/QQCgbcBOjo68Hq9pFIpFEWpGcDr9ZLNZnl4eCASiVQB6N7bwOfzMTw8/CnpbmlpYWRkpDoDbrebjo4OisUizc3N5HI5ZFkmm82i1+trChqNRkkmk7S2ttLX14fNZsNmsxEOhyvZEKurq+KnDg8Pxfb2tpicnBSTk5PC4/GIf41a0xUMBoUQQuzt7Ym9vT2xsLAgAPFmCWRZ5vb29kvcbzab8Xg8b3vg4eGBUCj0JQAGg4HGxsb3TfjV+gvwF+DH7yzq7e1lcHAQIQSZTAaAtbW1Z2ump6cxmUzkcjmKxSJnZ2fs7+9/DoDT6WR5eRmAQCBAuVx+FaC7u5tgMIimaezs7PwWwIdL4HA4cDgc6HSvb1FXV4fD4aChoaH2DLyUJEk4nU4A7u7ukGW5ao3VasXpdHJ+fs79/f3nAUiSVGmlAK2trdhsNkqlEgClUolyuYwQ4vNM+FT9/f0AuFwuAA4ODiiXy6yvr7OyslIB/LZj+PRN/2/wD3vgLYVCIc7Pzyu/8/n89wIIIVBV9XMz8LP5ABwdHVEoFNjc3ASoBBsfH6e+vp54PI6mafj9/krvqBng8vKycq+qKkIIYrHYszVGo5HOzk5yuRx6vR6j0fg9HgiFQpRKpapjZ7Va8fl8RKNRjo+P3wa4uLhga2sLg8GApmk0NTUxMDBAV1dX1d/ol4rFYsiyXAVQV1eHyWRiZmYGVVWJx+P4/X4ymQz5fJ6bmxuSySTS08nI5/PR09PDxMREZS4YGBigvb2dqakpJElCp9MhhOD09BSAzc1NZFlmdnYWi8WCTqdDkiSur6+5u7tjaWmpMhfs7u5WyhmNRgkEAs9LEAqFsNvtVXOBoijMzc1ht9sZGhp6NROLi4sAjI2NYbFYfpkxTdM4OTkhlUpVeyASiZBKpUgkEiiKwuPjI2azmUKhAEA6nSYajT7b8PHxscqwBoMBgHK5TCKRQFVV0uk0hUKBUqlEOBz+r3n9ajj1eDw0NjYCkEql2Nra+rBRXS4XbW1tFeCNjY33T8HV1RWKolT1gY/o6Wyhadrzj9ufHs//AWj91/9GnQwiAAAAAElFTkSuQmCC";
+      var docHead = document.getElementsByTagName('head')[0];
+      var newLink = document.createElement('link');
+      newLink.rel = 'shortcut icon';
+      newLink.type = 'image/x-icon';
+      newLink.href = 'data:image/png;base64,'+favIcon;
+      docHead.appendChild(newLink);
+    </script>
+    <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
+    <script defer src="https://pyscript.net/latest/pyscript.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira:wght@200..900&display=auto">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.4.2/css/all.css">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <style>
+      /*****************
+       * Color scheme. *
+       *****************/
+      :root {
+        --color-text:#FFFFFF;
+        --color-background:#000000;
+        --color-link:#00FF00;
+        --color-link-hover:#00FF00;
+        --color-interactive:#333333;
+        --color-interactive-text:#FFFFFF;
+        --color-interactive-text-disabled:#777777;
+        --color-interactive-hover:#000000;
+        --color-interactive-disabled-light:#CCCCCC;
+        --color-interactive-disabled-dark:#444444;
+        --color-interactive-shadow:#555555;
+        --color-separator:#000000;
+        --color-client-background:#FFFFFF;
+        --color-client-border:#000000;
+        --color-client-text:#000000;
+        --color-node-background:#000000;
+        --color-node-border:#FFFFFF;
+        --color-node-text:#FFFFFF;
+        --color-diagram-edge:#999999;
+        --color-footer-background:#FFFFFF;
+        --color-footer-text:#000000;
+        --color-footer-link:#000000;
+        --color-footer-link-hover:#000000;
+      }
+
+      /******************************************
+       * Customizations of common dependencies. *
+       ******************************************/
+      #pyscript_loading_splash { z-index:8192; }
+
+      /********************************************* 
+       * High-level page layout, look, and design. *
+       *********************************************/
+      html { height:100vh; }
+      body {
+        display:flex; flex-direction:column;
+        min-height:100vh;
+        padding:0px 0px 0px 0px;
+        background-color:var(--color-background);
+        font-family:'Saira',sans-serif;
+        color:var(--color-text);
+      }
+      .card-deck .card { border:0px; min-width:220px; }
+      .card {
+        min-width:350px !important;
+        background-color:var(--color-background);
+        color:var(--color-text);
+      }
+      .card-body { padding:2px 10px 2px 10px; line-height:18px; font-size:14px; }
+      a { font-weight:bold; text-decoration:none; color:var(--color-link); }
+      a:hover { text-decoration:none; color:var(--color-link-hover); }
+      .header { min-height:100px; margin-top:60px; margin-bottom:20px; }
+      hr { margin:0px; border-top:1px solid var(--color-separator) !important; opacity:1; }
+      h1 { text-align:left; }
+      h2 { margin-top:10px; line-height:24px; font-size:18px; font-weight:normal; }
+      h2 > p { text-align:justify; }
+      h3 {
+        width:100%;
+        margin-bottom:0px;
+        padding:0px 0px 6px 0px;
+        text-align:left;
+        white-space:nowrap;
+        font-size:20px;
+      }
+      .footer-spacer { margin-top:70px; }
+      footer {
+        width:100%;
+        margin:auto auto 0 auto;
+        padding:16px 0px 16px 0px;
+        background-color:var(--color-footer-background);
+        color:var(--color-footer-text);
+      }
+      footer a { color:var(--color-footer-link); }
+      footer a:hover { color:var(--color-footer-link-hover); }
+      footer .card-deck { margin-bottom:0px !important; }
+      footer .card { margin-bottom:0px !important; border:0px; background-color:var(--color-footer-background); }
+      footer .card-body-items { padding:8px 20px 0px 20px; }
+      footer .card-body-items-left { float:left; }
+      footer .card-body-items-right { float:right; }
+      footer .card-deck-copyright { height:26x !important; font-size:10px; }
+      footer .card-copyright { height:26px !important; padding:0px 16px 0px 16px; font-size:12px !important; }
+      footer .license-phrase { color:var(--color-footer-text); }
+      footer .item { margin:0px 25px 0px 0px; white-space:nowrap; font-size:14px; }
+      footer .icon { margin:0px 15px 0px 0px; font-size:20px; }
+      footer .icon-last { margin:0px 0px 0px 0px; font-size:18px; }
+      .noselect {
+        -webkit-touch-callout:none; /* iOS Safari */
+          -webkit-user-select:none; /* Safari */
+           -khtml-user-select:none; /* Konqueror HTML */
+             -moz-user-select:none; /* Old versions of Firefox */
+              -ms-user-select:none; /* Internet Explorer/Edge */
+                  user-select:none; /* Non-prefixed version, currently
+                                       supported by Chrome, Edge, Opera and Firefox */
+      }
+      @media (min-width: 768px) { html { font-size:16px; } }
+      @media all and (max-width:618px) { .header { margin-top:50px; } }
+
+      /************************************************************
+       * Layout for steps and data flow visualization containers. *
+       ************************************************************/
+      .grid-row { display:grid; grid-auto-rows:auto; grid-row-gap:0px; grid-column-gap:0px; }
+      .grid-col { padding:0px 6px 0px 6px; }
+      .grid-row-clients { grid-template-columns:3fr 4.5fr 4.5fr; }
+      .grid-row-nodes { grid-template-columns:3fr 3fr 3fr 3fr; }
+      .grid-row-recipient { grid-template-columns:3fr 9fr; }
+      .grid-row-diagram { grid-template-columns:3fr 9fr; }
+      .grid-row-diagram .grid-col { height:100px; }
+
+      /**************************************************** 
+       * Guidance/expository content layout and behavior. *
+       ****************************************************/
+      .step > ol > li { margin-left:8px; font-size:42px; font-weight:bold; }
+      .step > ol > li > div {
+        position:relative;
+        top:-16px;
+        padding-right:8px;
+        line-height:24px; 
+        font-size:18px; font-weight:normal;
+      }
+      @media all and (max-width:991px) { 
+        .step > ol > li { font-size:32px; }
+        .step > ol > li > div { top:-10px; padding-right:0px; line-height:20px; font-size:18px; }
+      }
+      @media all and (max-width:767px) {
+        .step > ol { margin-left:-12px; }
+        .step > ol > li { font-size:26px; }
+        .step > ol > li > div { top:-10px; padding-right:0px; line-height:14px; font-size:12px; }
+      }
+
+      /***********************************************************
+       * Panel elements (representing parties) and their layout. *
+       ***********************************************************/
+      .panel { height:100%; width:100%; margin:0px 10px 0px 0px; padding:0px 10px 0px 10px; }
+      .entity { height:100%; margin-top:0px; padding:20px 24px 20px 24px; }
+      .entity > div { display:table; height:100%; width:100%; }
+      .entity > div > div { display:table-row; }
+      .entity > div > div > div { display:table-cell; padding-bottom:14px; text-align:center; }
+      .entity > div > div:last-child > div { vertical-align:bottom; } /* Usually client buttons. */
+      .client {
+        border:1px solid var(--color-client-border);
+        background-color:var(--color-client-background);
+        color:var(--color-client-text);
+      }
+      .node {
+        border:1px solid var(--color-node-border);
+        background-color:var(--color-node-background);
+        color:var(--color-node-text);
+      }
+      .recipient > div > div > div { vertical-align:middle !important; } /* Usually output. */
+      h3 { margin-bottom:6px; }
+      h4 { margin-top:8px; padding-top:2px; text-align:center; line-height:16px !important; font-size:14px; }
+      @media all and (max-width:991px) { 
+        .client { padding:10px; }
+        h3 { font-size:14px; }
+      }
+      @media all and (max-width:767px) {
+        .panel { padding:0px; }
+        .entity { padding:10px; }
+        h4 { line-height:14px; font-size:12px !important; }
+      }
+
+      /***************************************************************
+       * Interactive user interface (UI) custom layout and elements. *
+       ***************************************************************/
+      .array { height:20px; margin:0px 4px 0px 4px; white-space:nowrap; }
+      .array > span {
+        padding:1px 4px 1px 4px;
+        border-top:1px solid var(--color-text);
+        border-left:1px solid var(--color-text);
+        border-bottom:1px solid var(--color-text);
+        font-size:12px; font-weight:bold;
+      }
+      .array > span:last-child { border-right:1px solid var(--color-text); }
+      .bytes { height:10px; margin:8px 4px 8px 4px; white-space:nowrap; }
+      .bytes > span { padding-right:24px; font-size:14px; }
+      .bytes > table { height:100%; width:100%; }
+      .order-price {
+        margin-top:12px; margin-bottom:4px;
+        text-align:center;
+        font-size:18px; font-weight:bold;
+        color:var(--color-interactive);
+      }
+      .order-price-bid { color:#009900; }
+      .order-price-ask { color:#BB0000; }
+      button {
+        width:50px;
+        margin:0px 2px 2px 0px;
+        -webkit-box-shadow: 2px 2px 0px 0px var(--color-interactive-shadow);
+        -moz-box-shadow: 2px 2px 0px 0px var(--color-interactive-shadow);
+        box-shadow: 2px 2px 0px 0px var(--color-interactive-shadow);
+        padding:8px;
+        border:0px solid #000000;
+        background-color:var(--color-interactive);
+        color:var(--color-interactive-text);
+      }
+      button:hover { background-color:var(--color-interactive-hover); }
+      button:active {
+        margin:2px 0px 0px 2px;
+        -webkit-box-shadow: 0px 0px 0px 0px var(--color-interactive-shadow);
+        -moz-box-shadow: 0px 0px 0px 0px var(--color-interactive-shadow);
+        box-shadow: 0px 0px 0px 0px var(--color-interactive-shadow);
+      }
+      button:disabled {
+        background-color:var(--color-interactive-disabled-light);
+        color:var(--color-interactive-text-disabled);
+      }
+      .button-bid { background-color:#009900; }
+      .button-ask { background-color:#BB0000; }
+      #recipient-output {
+        margin-top:0px;
+        padding:0px 20px 10px 20px;
+        text-align:center;
+        font-size:32px;
+      }
+      @media all and (max-width:767px) {
+        button { font-size:14px; }
+        #recipient-output { line-height:28px; font-size:24px; }
+      }
+      @media all and (max-width:575px) {
+        button { line-height:12px !important; font-size:10px; }
+        #recipient-output { margin-bottom:6px; line-height:24px; font-size:20px; }
+      }
+      @media all and (max-width:767px) { .order-price { font-size:16px; } }
+      .entity > div > div > div > .ui-slider { display:inline-block; margin-bottom:10px; }
+      .ui-slider { margin:18px 0px 6px 0px; width:20px; height:100px; }
+      .ui-slider-range { background-color:var(--color-interactive); }
+      .ui-slider-disabled .ui-slider-range { background-color:var(--color-interactive-disabled-dark); }
+      .ui-slider .ui-slider-handle { font-size:30px; }
+      .ui-slider .ui-state-hover { background-color:var(--color-interactive); }
+      .ui-slider .ui-state-active { background-color:var(--color-interactive); }
+    </style>
+  </head>
+  <body>
+    <div class="container header">
+      <div class="card-deck mb-3">
+        <div class="card mb-4">
+          <div class="card-body">
+            <h1><b>tinybook</b>: Encrypted Order Book Workflow Demo</h1>
+            <hr/>
+            <h2>
+              <p>
+                This secure order book workflow demo (source code <a href="https://github.com/choosek/tinybook/tree/gh-pages">available on GitHub</a>) simulates a secure multi-party computation (MPC) protocol <b>entirely in your browser</b> by importing and invoking the <a href="https://github.com/choosek/tinybook">tinybook</a> library using <a href="https://pyscript.net">PyScript</a>.
+              </p>
+              <p>
+                Within the implementation of the library, vectors of <a href="https://en.wikipedia.org/wiki/Finite_field">finite field</a> elements are used to represent both submitted orders and the overall outcome. In the visualizations below, instances of these data structures are rendered using a variant of a <a href="https://en.wikipedia.org/wiki/Heat_map">heat map</a> in which the brightness value corresponds to the difference between the finite field element and zero. For example, a vector such as
+                <span class="array">
+                  <span>2 mod 11</span><span>5 mod 11</span><span>8 mod 11</span><span>3 mod 11</span><span>10 mod 11</span>
+                </span>
+                would be represented by
+                <span class="bytes" style="margin-right:-2px;">
+                  <span style="background-color:rgb(50,50,50);">&nbsp;</span><span style="background-color:rgb(128,128,128);"></span><span style="background-color:rgb(200,200,200);"></span><span style=" background-color:rgb(80,80,80);"></span><span style="background-color:rgb(230,230,230);"></span>
+                </span>.
+                Note also that voters and nodes are numbered starting from zero in order to match the source code.
+              </p>
+            </h2>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="grid-row grid-row-clients">
+        <div class="grid-col">
+          <div class="step">
+            <ol start="1">
+              <li>
+                <div>
+                  For each order, use the slider to choose a value and then click <b>Bid</b> or <b>Ask</b>. The orders are encoded as vectors, masks are requested from the nodes, and the masked vectors are broadcast to all the nodes.
+                </div>
+              </li>
+            </ol>
+          </div>
+        </div>
+        <div class="grid-col">
+          <div class="panel">
+            <div class="entity client">
+              <div>
+                <div><h3>Order 0</h3></div>
+                <div>
+                  <div>
+                    <div class="order-price order-price-ask noselect" id="order-price-0"></div>
+                    <div id="order-slider-0"></div>
+                  </div>
+                </div>
+                <div><div><button class="button-ask" id="order-0">Ask</button></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="grid-col">
+          <div class="panel">
+            <div class="entity client">
+              <div>
+                <div><h3>Order 1</h3></div>
+                <div>
+                  <div>
+                    <div class="order-price order-price-bid noselect" id="order-price-1"></div>
+                    <div id="order-slider-1"></div>
+                  </div>
+                </div>
+                <div><div><button class="button-bid" id="order-1">Bid</button></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="grid-row grid-row-diagram">
+        <div class="grid-col"></div>
+        <div class="grid-col">
+          <div id="diagram-input"></div>
+        </div>
+      </div>
+      <div class="grid-row grid-row-nodes">
+        <div class="grid-col">
+          <div class="step" id="step-nodes">
+            <ol start="2">
+              <li>
+                <div>
+                  Each node receives the masked vectors corresponding to the orders, and then locally computes its secret share of the overall result vector.
+                </div>
+              </li>
+            </ol>
+          </div>
+        </div>
+        <div class="grid-col">
+          <div class="panel">
+            <div class="entity node" id="node-0">
+              <div>
+                <div><h3>Node 0</h3></div>
+                <div>
+                  <div>
+                    <h4 class="noselect" id="node-0-orders-title">Masked Orders</h4>
+                    <div class="bytes" id="order-masked-0-at-node-0"></div>
+                    <div class="bytes" id="order-masked-1-at-node-0"></div>
+                  </div>
+                </div>
+                <div>
+                  <div>
+                    <h4 class="noselect" id="node-0-share-title">Secret Share of Outcome</h4>
+                    <div class="bytes" id="share-at-node-0"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="grid-col">
+          <div class="panel">
+            <div class="entity node" id="node-1">
+              <div>
+                <div><h3>Node 1</h3></div>
+                <div>
+                  <div>
+                    <h4 class="noselect" id="node-1-orders-title">Masked Orders</h4>
+                    <div class="bytes" id="order-masked-0-at-node-1"></div>
+                    <div class="bytes" id="order-masked-1-at-node-1"></div>
+                  </div>
+                </div>
+                <div>
+                  <div>
+                    <h4 class="noselect" id="node-1-share-title">Secret Share of Outcome</h4>
+                    <div class="bytes" id="share-at-node-1"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="grid-col">
+          <div class="panel">
+            <div class="entity node" id="node-2">
+              <div>
+                <div><h3>Node 2</h3></div>
+                <div>
+                  <div>
+                    <h4 class="noselect" id="node-2-orders-title">Masked Orders</h4>
+                    <div class="bytes" id="order-masked-0-at-node-2"></div>
+                    <div class="bytes" id="order-masked-1-at-node-2"></div>
+                  </div>
+                </div>
+                <div>
+                  <div>
+                    <h4 class="noselect" id="node-2-share-title">Secret Share of Outcome</h4>
+                    <div class="bytes" id="share-at-node-2"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="grid-row grid-row-diagram">
+        <div class="grid-col"></div>
+        <div class="grid-col">
+          <div id="diagram-output"></div>
+        </div>
+      </div>
+      <div class="grid-row grid-row-recipient">
+        <div class="grid-col">
+          <div class="step" id="step-recipient">
+            <ol start="3">
+              <li>
+                <div>
+                  The order book operator receives the secret shares of the result vector from each node and reconstructs it to determine the outcome.
+                </div>
+              </li>
+            </ol>
+          </div>
+        </div>
+        <div class="grid-col">
+          <div class="panel">
+            <div class="entity client recipient" id="recipient">
+              <div>
+                <div><h3>Network Output</h3></div>
+                <div>
+                  <div>
+                    <div id="recipient-output"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-spacer"></div>
+    <footer>
+      <div class="container noselect">
+        <div class="card-deck mb-3">
+          <div class="card mb-4">
+            <div class="card-body card-body-items">
+              <div class="card-body-items-left">
+                <span class="item">
+                  <span class="license-phrase">Made available under the </span>
+                  <a href="https://opensource.org/license/mit/">MIT License</a>
+                </span>
+              </div>
+              <div class="card-body-items-right">
+                <span class="icon"><a href="mailto:contact@choosek.com"><i class="far fa-envelope"></i></a></span>
+                <span class="icon-last"><a href="https://github.com/choosek"><i class="fab fa-github"></i></a></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-deck mb-3 card-deck-copyright">
+          <div class="card mb-4 card-copyright"></div>
+        </div>
+      </div>
+    </footer>
+    <py-config>
+      packages = ["tinybook~=0.1"]
+    </py-config>
+    <section class="pyscript">
+      <py-script>
+        from pyodide.ffi import create_proxy
+        import js
+
+        from tinybook import *
+
+        def modulo_to_uint8(m):
+            return 64 + (((255 - 64) * int(m)) // m.modulus)
+
+        def compute_outcome_if_ready():
+            if all(order is not None for order in orders):
+                shares = [node.outcome(*orders) for node in nodes]
+                for node_id in range(3):
+                    js.nodeShowShare(
+                        node_id,
+                        [modulo_to_uint8(value) for value in shares[node_id]]
+                    )
+                result = reveal(shares)
+                js.recipientEnable()
+                js.document.getElementById('recipient-output').innerHTML = (
+                    'No transaction.'
+                    if result is None else
+                    'Ask: ' + str(min(result)) + '; Bid: ' + str(max(result)) + '.'
+                )
+
+        def make_order_handler(order_id):
+
+            def order_handler(_):
+                price = js.clientGetPriceAndDisable(order_id)
+                request_ = request.ask() if order_id == 0 else request.bid()
+                masks = [node.masks(request_) for node in nodes]
+                orders[order_id] = order(masks, price)
+                js.diagramInputUpdate()
+                js.nodesEnable()
+                for node_id in range(3):
+                    js.nodeShowOrderMasked(
+                        order_id, node_id,
+                        [modulo_to_uint8(list(d.values())[0]) for d in orders[order_id]]
+                    )
+                compute_outcome_if_ready()
+
+            return order_handler
+
+        nodes = [node(), node(), node()]
+        orders = [None, None]
+
+        preprocess(nodes, prices=16)
+        for order_id in range(len(orders)):
+            js.document.getElementById('order-' + str(order_id)).addEventListener(
+                'click',
+                create_proxy(make_order_handler(order_id))
+            )
+      </py-script>
+    </section>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous">
+    </script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" 
+            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
+    </script>
+    <script>
+      class Diagram {
+        constructor (elementId, height, thickness) {
+          this.element = document.getElementById(elementId);
+          this.height = height;
+          this.thickness = (thickness !== null) ? 2 : thickness;
+          this.shows = {};
+          this.element.style.position = "relative";
+          this.element.style.height = height + "px";
+        }
+
+        edge (top, elementId, elementIds) {
+          const edge = document.createElement("div");
+          edge.style.position = "absolute";
+          edge.style.top = top + "%";
+          edge.style.border = this.thickness + "px solid var(--color-diagram-edge)";
+          edge.style.opacity = 0;
+          if (elementId !== null) {
+            edge.id = elementId;
+            this.shows[elementId] = (elementIds == null) ? [] : elementIds;
+          }
+          this.element.appendChild(edge);
+          return edge;
+        }
+
+        vertical (index, total, top, height, elementId, elementIds) {
+          const edge = this.edge(top, elementId, elementIds);
+          edge.style.left = Math.round((100 * (1 + (2 * index))) / (2 * total))  + "%";
+          edge.style.height = height + "%";
+          edge.style.width = 0 + "px";
+        }
+
+        horizontal (total, top, elementId, elementIds) {
+          const edge = this.edge(top, elementId, elementIds);
+          const denom = 2 * total, left = Math.round(100 / denom);
+          edge.style.left = left + "%";
+          edge.style.height = 0 + "px";
+          edge.style.width = "calc(" +
+            this.thickness + "px + " + Math.round(100 - (100 / denom) - left) +
+          "%)";
+        }
+
+        show (elementId) {
+          document.getElementById(elementId).style.opacity = 1;
+          if (elementId in this.shows) {
+            for (let i = 0; i < this.shows[elementId].length; i++) {
+              this.show(this.shows[elementId][i]);
+            }
+          }
+        }
+      }
+
+      function showBytes(elementId, array) {
+        const bytes = document.getElementById(elementId);
+        bytes.classList.add("bytes");
+        bytes.style.backgroundColor = "#FFFFFF";
+        const table = document.createElement("table");
+        table.style.width = "100%";
+        const tr = document.createElement("tr");
+        for (let i = 0; i < array.length; i++) {
+          const td = document.createElement("td");
+          td.style.backgroundColor = "rgb(" + array[i] + "," + array[i] + "," + array[i] + ")";
+          tr.appendChild(td);
+        }
+        table.appendChild(tr);
+        bytes.appendChild(table);
+      }
+
+      function setOpacities(opacity, elementIds) {
+        elementIds.map(function(elementId) {
+          document.getElementById(elementId).style.opacity = opacity;
+        });
+      }
+
+      async function initialize() {
+        setOpacities(0, [
+            "node-0-orders-title", "node-0-share-title",
+            "node-1-orders-title", "node-1-share-title",
+            "node-2-orders-title", "node-2-share-title"
+        ]);
+        setOpacities(0.2, [
+            "step-nodes", "node-0", "node-1", "node-2",
+            "step-recipient", "recipient"
+        ]);
+
+        diagramInput = new Diagram("diagram-input", 100);
+        diagramInput.vertical(0, 2, 0, 50, "it0", ["ih"]);
+        diagramInput.vertical(1, 2, 0, 50, "it1", ["ih"]);
+        diagramInput.horizontal(9, 50, "ih", ["ib0", "ib1", "ib2"]);
+        diagramInput.vertical(0, 9, 50, 50, "ib0");
+        diagramInput.vertical(4, 9, 50, 50, "ib1");
+        diagramInput.vertical(8, 9, 50, 50, "ib2");
+
+        diagramOutput = new Diagram("diagram-output", 100);
+        diagramOutput.vertical(0, 3, 0, 50, "ot0");
+        diagramOutput.vertical(1, 3, 0, 50, "ot1");
+        diagramOutput.vertical(2, 3, 0, 50, "ot2");
+        diagramOutput.horizontal(3, 50, "oh");
+        diagramOutput.vertical(0, 1, 50, 50, "ob0");
+
+        for (let orderId = 0; orderId < orders.length; orderId++) {
+          const price = Math.floor(Math.random() * 16);
+          orders[orderId].price = price;
+          document.getElementById("order-price-" + orderId).innerHTML = price;
+          $(function() {
+            $("#order-slider-" + orderId).slider({
+              orientation: "vertical",
+              range: "min",
+              min: 0,
+              max: 15,
+              value: price,
+              slide: function(event, ui) {
+                document.getElementById("order-price-" + orderId).innerHTML = ui.value;
+                orders[orderId].price = ui.value;
+              }
+            });
+          });
+        }
+      }
+
+      function clientGetPriceAndDisable(orderId) {
+        $("#order-slider-" + orderId).slider("disable");
+        document.getElementById("order-" + orderId).disabled = true;
+        orders[orderId].status = true;
+        return orders[orderId].price;
+      }
+
+      function diagramInputUpdate() {
+        for (let orderId = 0; orderId < orders.length; orderId++) {
+          if (orders[orderId].status) {
+            diagramInput.show("it" + orderId);
+          }
+        }
+      }
+
+      function nodesEnable() {
+        setOpacities(1, ["step-nodes", "node-0", "node-1", "node-2"]);
+      }
+
+      function nodeShowOrderMasked(orderId, nodeId, data) {
+        setOpacities(1, ["node-" + nodeId + "-orders-title"]);
+        showBytes("order-masked-" + orderId + "-at-node-" + nodeId, Array.from(data));
+      }
+
+      function nodeShowShare(nodeId, data) {
+        setOpacities(1, ["node-" + nodeId + "-share-title"]);
+        showBytes("share-at-node-" + nodeId, Array.from(data));
+      }
+
+      function recipientEnable() {
+        ["ot0", "ot1", "ot2", "oh", "ob0"].map( function(id) { diagramOutput.show(id); } );
+        setOpacities(1, ["step-recipient", "recipient"]);
+      }
+
+      let orders = [{"price": 0}, {"price": 0}];
+      let diagramInput = null, diagramOutput = null;
+      window.onload = initialize;
+    </script>
+  </body>
+</html>
