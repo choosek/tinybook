@@ -140,10 +140,13 @@
                   user-select:none; /* Non-prefixed version, currently
                                        supported by Chrome, Edge, Opera and Firefox */
       }
-      @media all and (max-width:768px) {
-        footer .card-body-items-left { margin-top:4px; }
+      @media all and (max-width:1199px) { .container { max-width:960px; } }
+      @media all and (max-width:991px) { .container { max-width:720px; } }
+      @media all and (max-width:767px) {
+        .container { max-width:540px; }
+        footer .card-body-items-left { margin-top:5px; }
         footer .card-body-items-right { margin-top:0px; }
-        footer .item { font-size:18px !important; }
+        footer .item { font-size:18px; }
         footer { width:calc(100% - 30px); margin-left:20px; }
         footer .footer-window {
           height:72px;
