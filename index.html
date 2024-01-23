@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
     <script defer src="https://pyscript.net/latest/pyscript.js"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira:wght@200..900&display=auto">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.4.2/css/all.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.5.1/css/all.css">
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
@@ -45,9 +45,12 @@
         --color-node-text:#FFFFFF;
         --color-diagram-edge:#999999;
         --color-footer-background:#FFFFFF;
-        --color-footer-text:#000000;
+        --color-footer-text:#323232;
         --color-footer-link:#000000;
-        --color-footer-link-hover:#000000;
+        --color-footer-link-hover:#404040;
+        --color-footer-shadow-dark:#717171;
+        --color-footer-bevel-light:#D2D2D2;
+        --color-footer-surface-light:#F3F3F3;
       }
 
       /******************************************
@@ -67,6 +70,7 @@
         font-family:'Saira',sans-serif;
         color:var(--color-text);
       }
+      .container { max-width:1140px; }
       .card-deck .card { border:0px; min-width:220px; }
       .card {
         min-width:350px !important;
@@ -97,19 +101,36 @@
         background-color:var(--color-footer-background);
         color:var(--color-footer-text);
       }
+      footer {
+        width:calc(100% - 45px);
+        margin:auto auto 0 auto; margin-left:30px; padding:0px;
+        background-color:var(--color-footer-shadow-dark);
+      }
+      footer .footer-window {
+        position:relative; top:-15px; left:-15px;
+        height:77px;
+        border-right:15px solid var(--color-footer-bevel-light);
+        background-color:var(--color-footer-surface-light);
+      }
+      footer .container { padding-left:20px; padding-right:20px; }
       footer a { color:var(--color-footer-link); }
       footer a:hover { color:var(--color-footer-link-hover); }
-      footer .card-deck { margin-bottom:0px !important; }
-      footer .card { margin-bottom:0px !important; border:0px; background-color:var(--color-footer-background); }
-      footer .card-body-items { padding:8px 20px 0px 20px; }
-      footer .card-body-items-left { float:left; }
-      footer .card-body-items-right { float:right; }
-      footer .card-deck-copyright { height:26x !important; font-size:10px; }
-      footer .card-copyright { height:26px !important; padding:0px 16px 0px 16px; font-size:12px !important; }
-      footer .license-phrase { color:var(--color-footer-text); }
-      footer .item { margin:0px 25px 0px 0px; white-space:nowrap; font-size:14px; }
-      footer .icon { margin:0px 15px 0px 0px; font-size:20px; }
-      footer .icon-last { margin:0px 0px 0px 0px; font-size:18px; }
+      footer .card { margin-bottom:0px !important; }
+      footer .card-body-items {
+        padding:22px 20px 6px 20px;
+        background-color:var(--color-footer-surface-light);
+      }
+      footer .card-body-items-left { float:left; margin-top:8px; }
+      footer .card-body-items-right { float:right; margin-top:3px; }
+      footer .item {
+        margin:10px 25px 0px 0px;
+        font-size:20px; font-weight:500;
+        color:var(--color-footer-text);
+      }
+      footer .icon { position:relative; top:2px; margin-right:10px; font-size:26px; }
+      footer .icon-last { position:relative; top:2px; font-size:26px; }
+      footer .fa-house { position:absolute; top:8px; left:-28px; font-size:22px; }
+      .bottom-spacer { min-height:15px; }
       .noselect {
         -webkit-touch-callout:none; /* iOS Safari */
           -webkit-user-select:none; /* Safari */
@@ -119,7 +140,18 @@
                   user-select:none; /* Non-prefixed version, currently
                                        supported by Chrome, Edge, Opera and Firefox */
       }
-      @media (min-width: 768px) { html { font-size:16px; } }
+      @media all and (max-width:768px) {
+        footer .card-body-items-left { margin-top:4px; }
+        footer .card-body-items-right { margin-top:0px; }
+        footer .item { font-size:18px !important; }
+        footer { width:calc(100% - 30px); margin-left:20px; }
+        footer .footer-window {
+          height:72px;
+          top:-10px; left:-10px;
+          border-right:10px solid var(--color-footer-bevel-light) !important;
+        }
+        .bottom-spacer { min-height:10px; }
+      }
       @media all and (max-width:618px) { .header { margin-top:50px; } }
 
       /************************************************************
@@ -451,28 +483,28 @@
     </div>
     <div class="footer-spacer"></div>
     <footer>
-      <div class="container noselect">
-        <div class="card-deck mb-3">
-          <div class="card mb-4">
-            <div class="card-body card-body-items">
-              <div class="card-body-items-left">
-                <span class="item">
-                  <span class="license-phrase">Made available under the </span>
-                  <a href="https://opensource.org/license/mit/">MIT License</a>
-                </span>
-              </div>
-              <div class="card-body-items-right">
-                <span class="icon"><a href="mailto:contact@choosek.com"><i class="far fa-envelope"></i></a></span>
-                <span class="icon-last"><a href="https://github.com/choosek"><i class="fab fa-github"></i></a></span>
+      <div class="footer-window">
+        <div class="container noselect">
+          <div class="card-deck mb-3">
+            <div class="card mb-4">
+              <div class="card-body card-body-items">
+                <div class="card-body-items-left">
+                  <span class="item">&#169; 2023 Choose K Corp.</span>
+                </div>
+                <div class="card-body-items-right">
+                  <span class="icon"><a href="https://choosek.com"><i class="fa-solid fa-house"></i></a></span>
+                  <span class="icon"><a href="mailto:contact@choosek.com"><i class="far fa-envelope"></i></a></span>
+                  <span class="icon"><a href="https://twitter.com/choosekcorp"><i class="fab fa-x-twitter"></i></a></span>
+                  <span class="icon"><a href="https://linkedin.com/company/choosek"><i class="fab fa-linkedin"></i></a></span>
+                  <span class="icon-last"><a href="https://github.com/choosek"><i class="fab fa-github"></i></a></span>
+                </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="card-deck mb-3 card-deck-copyright">
-          <div class="card mb-4 card-copyright"></div>
-        </div>
       </div>
     </footer>
+    <div class="bottom-spacer"></div>
     <py-config>
       packages = ["tinybook~=0.1"]
     </py-config>
