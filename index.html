@@ -26,7 +26,7 @@
        *****************/
       :root {
         --color-text:#FFFFFF;
-        --color-background:#000000;
+        --color-background:rgb(0,0,0,0);
         --color-link:#00FF00;
         --color-link-hover:#00FF00;
         --color-interactive:#333333;
@@ -36,7 +36,7 @@
         --color-interactive-disabled-light:#CCCCCC;
         --color-interactive-disabled-dark:#444444;
         --color-interactive-shadow:#555555;
-        --color-separator:#000000;
+        --color-separator:#FFFFFF;
         --color-client-background:#FFFFFF;
         --color-client-border:#000000;
         --color-client-text:#000000;
@@ -70,7 +70,9 @@
         font-family:'Saira',sans-serif;
         color:var(--color-text);
       }
-      .container { max-width:1140px; }
+      .background-pixels-container { position:fixed; width:100%; height:100%; z-index:0; }
+      #background-pixels { height:100%; width:100%; }
+      .container { max-width:1140px; z-index:999; }
       .card-deck .card { border:0px; min-width:220px; }
       .card {
         min-width:350px !important;
@@ -100,6 +102,7 @@
         padding:16px 0px 16px 0px;
         background-color:var(--color-footer-background);
         color:var(--color-footer-text);
+        z-index:999;
       }
       footer {
         width:calc(100% - 45px);
@@ -293,6 +296,9 @@
     </style>
   </head>
   <body>
+    <div class="background-pixels-container">
+      <canvas id="background-pixels"></canvas>
+    </div>
     <div class="container header">
       <div class="card-deck mb-3">
         <div class="card mb-4">
@@ -574,6 +580,33 @@
             integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
     </script>
     <script>
+      function backgroundPixels() {
+        const canvas = document.getElementById("background-pixels");
+        canvas.width  = canvas.offsetWidth;
+        canvas.height = canvas.offsetHeight;
+        const canvasHeight = canvas.getBoundingClientRect().height;
+        const canvasWidth = canvas.getBoundingClientRect().width;
+        const context = canvas.getContext("2d");
+        const pixelSize = Math.floor(Math.sqrt((canvasHeight * canvasWidth) / 1200));
+        const colorRange = 23;
+        const xCenter = Math.floor(canvasWidth / 2);
+        for (let y = 0; y < canvasHeight; y += pixelSize) {
+          for (let x = 0; x < canvasWidth * 2; x += pixelSize) {
+            const yPixel = Math.floor(y / pixelSize);
+            const xPixel = Math.floor(x / pixelSize);
+            const even = xPixel % 2 == 0;
+            const x_ = (((even ? -1 : 1) * x) / 2) + xCenter - (even ? 0 : (pixelSize / 2));
+            let r = Math.pow((2 * xPixel) + (25 * yPixel * yPixel), 17) % colorRange;
+            if (r == 0) {
+              r = Math.pow((yPixel + 1) * xPixel * xPixel * 17, 4) % colorRange;
+            }
+            r += 5 + Math.round(Math.random() * 6);
+            context.fillStyle = "rgb(" + [r, r, r].join(",") + ")";
+            context.fillRect(x_, y, pixelSize, pixelSize);
+          }
+        }
+      }
+
       class Diagram {
         constructor (elementId, height, thickness) {
           this.element = document.getElementById(elementId);
@@ -648,6 +681,8 @@
       }
 
       async function initialize() {
+        backgroundPixels();
+
         setOpacities(0, [
             "node-0-orders-title", "node-0-share-title",
             "node-1-orders-title", "node-1-share-title",
@@ -693,6 +728,10 @@
         }
       }
 
+      function resize() {
+        backgroundPixels();
+      }
+
       function clientGetPriceAndDisable(orderId) {
         $("#order-slider-" + orderId).slider("disable");
         document.getElementById("order-" + orderId).disabled = true;
@@ -730,6 +769,7 @@
       let orders = [{"price": 0}, {"price": 0}];
       let diagramInput = null, diagramOutput = null;
       window.onload = initialize;
+      window.onresize = resize;
     </script>
   </body>
 </html>
