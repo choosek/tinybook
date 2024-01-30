@@ -65,6 +65,7 @@
       body {
         display:flex; flex-direction:column;
         min-height:100vh;
+        min-width:480px !important;
         padding:0px 0px 0px 0px;
         background-color:var(--color-background);
         font-family:'Saira',sans-serif;
@@ -125,14 +126,10 @@
       }
       footer .card-body-items-left { float:left; margin-top:8px; }
       footer .card-body-items-right { float:right; margin-top:3px; }
-      footer .item {
-        margin:10px 25px 0px 0px;
-        font-size:20px; font-weight:500;
-        color:var(--color-footer-text);
-      }
+      footer .item { margin:0px; font-size:20px; font-weight:500; color:var(--color-footer-text); }
       footer .icon { position:relative; top:2px; margin-right:10px; font-size:26px; }
-      footer .icon-last { position:relative; top:2px; font-size:26px; }
-      footer .fa-house { position:absolute; top:8px; left:-28px; font-size:22px; }
+      footer .icon:last-child { margin-right:0px; }
+      footer .fa-house { position:absolute; top:8px; left:-29px; font-size:22px; }
       .bottom-spacer { min-height:15px; }
       .noselect {
         -webkit-touch-callout:none; /* iOS Safari */
@@ -145,20 +142,34 @@
       }
       @media all and (max-width:1199px) { .container { max-width:960px; } }
       @media all and (max-width:991px) { .container { max-width:720px; } }
+      @media all and (max-width:618px) { .header { margin-top:50px; } }
       @media all and (max-width:767px) {
         .container { max-width:540px; }
-        footer .card-body-items-left { margin-top:5px; }
-        footer .card-body-items-right { margin-top:0px; }
-        footer .item { font-size:18px; }
         footer { width:calc(100% - 30px); margin-left:20px; }
         footer .footer-window {
           height:72px;
           top:-10px; left:-10px;
           border-right:10px solid var(--color-footer-bevel-light) !important;
         }
+        footer .card-body-items-left { margin-top:5px; }
+        footer .card-body-items-right { margin-top:0px; }
+        footer .item { font-size:18px; }
         .bottom-spacer { min-height:10px; }
       }
-      @media all and (max-width:618px) { .header { margin-top:50px; } }
+      @media all and (max-width:539px) {
+        .header { margin-bottom:5px; }
+        h2 { line-height:20px; font-size:14px; }
+      }
+      @media all and (max-width:550px) {
+        footer .footer-window { height:59px; }
+        footer .card { min-width:0px !important; }
+        footer .card-body-items { padding:15px 4px 0px 4px; }
+        footer .card-body-items-left { margin-top:6px; }
+        footer .card-body-items-right { margin-top:3px; }
+        footer .item { font-size:14px !important; }
+        footer .icon { margin-right:6px; font-size:20px !important; }
+        footer .fa-house { top:6px; left:-23px; font-size:18px; }
+      }
 
       /************************************************************
        * Layout for steps and data flow visualization containers. *
@@ -174,7 +185,7 @@
       /**************************************************** 
        * Guidance/expository content layout and behavior. *
        ****************************************************/
-      .step > ol > li { margin-left:8px; font-size:42px; font-weight:bold; }
+      .step > ol > li { margin-left:20px; font-size:42px; font-weight:bold; }
       .step > ol > li > div {
         position:relative;
         top:-16px;
@@ -183,13 +194,16 @@
         font-size:18px; font-weight:normal;
       }
       @media all and (max-width:991px) { 
-        .step > ol > li { font-size:32px; }
+        .step > ol > li { margin-left:8px; font-size:32px; }
         .step > ol > li > div { top:-10px; padding-right:0px; line-height:20px; font-size:18px; }
       }
       @media all and (max-width:767px) {
         .step > ol { margin-left:-12px; }
         .step > ol > li { font-size:26px; }
         .step > ol > li > div { top:-10px; padding-right:0px; line-height:14px; font-size:12px; }
+      }
+      @media all and (max-width:575px) {
+        .step > ol > li { margin-left:8px; font-size:22px !important; }
       }
 
       /***********************************************************
@@ -223,10 +237,15 @@
         .entity { padding:10px; }
         h4 { line-height:14px; font-size:12px !important; }
       }
+      @media all and (max-width:575px) {
+        .entity { height:100%; margin-top:0px; }
+        h3 { font-size:14px; }
+        h4 { line-height:12px !important; font-size:10px !important; }
+      }
 
-      /***************************************************************
-       * Interactive user interface (UI) custom layout and elements. *
-       ***************************************************************/
+      /**************************************************** 
+       * Interactive user interface (UI) common elements. *
+       ****************************************************/
       .array { height:20px; margin:0px 4px 0px 4px; white-space:nowrap; }
       .array > span {
         padding:1px 4px 1px 4px;
@@ -239,14 +258,10 @@
       .bytes { height:10px; margin:8px 4px 8px 4px; white-space:nowrap; }
       .bytes > span { padding-right:24px; font-size:14px; }
       .bytes > table { height:100%; width:100%; }
-      .order-price {
-        margin-top:12px; margin-bottom:4px;
-        text-align:center;
-        font-size:18px; font-weight:bold;
-        color:var(--color-interactive);
+      @media all and (max-width:539px) {
+        .array > span { font-size:10px; }
+        .bytes > span { font-size:10px; }
       }
-      .order-price-bid { color:#009900; }
-      .order-price-ask { color:#BB0000; }
       button {
         width:50px;
         margin:0px 2px 2px 0px;
@@ -269,8 +284,6 @@
         background-color:var(--color-interactive-disabled-light);
         color:var(--color-interactive-text-disabled);
       }
-      .button-bid { background-color:#009900; }
-      .button-ask { background-color:#BB0000; }
       #recipient-output {
         margin-top:0px;
         padding:0px 20px 10px 20px;
@@ -285,6 +298,20 @@
         button { line-height:12px !important; font-size:10px; }
         #recipient-output { margin-bottom:6px; line-height:24px; font-size:20px; }
       }
+
+      /***************************************************************
+       * Interactive user interface (UI) custom layout and elements. *
+       ***************************************************************/
+      .order-price {
+        margin-top:12px; margin-bottom:4px;
+        text-align:center;
+        font-size:18px; font-weight:bold;
+        color:var(--color-interactive);
+      }
+      .order-price-bid { color:#009900; }
+      .order-price-ask { color:#BB0000; }
+      .button-bid { background-color:#009900; }
+      .button-ask { background-color:#BB0000; }
       @media all and (max-width:767px) { .order-price { font-size:16px; } }
       .entity > div > div > div > .ui-slider { display:inline-block; margin-bottom:10px; }
       .ui-slider { margin:18px 0px 6px 0px; width:20px; height:100px; }
@@ -505,7 +532,7 @@
                   <span class="icon"><a href="mailto:contact@choosek.com"><i class="far fa-envelope"></i></a></span>
                   <span class="icon"><a href="https://twitter.com/choosekcorp"><i class="fab fa-x-twitter"></i></a></span>
                   <span class="icon"><a href="https://linkedin.com/company/choosek"><i class="fab fa-linkedin"></i></a></span>
-                  <span class="icon-last"><a href="https://github.com/choosek"><i class="fab fa-github"></i></a></span>
+                  <span class="icon"><a href="https://github.com/choosek"><i class="fab fa-github"></i></a></span>
                 </div>
               </div>
             </div>
